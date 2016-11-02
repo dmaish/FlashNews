@@ -77,6 +77,7 @@ public class ReadRss extends AsyncTask<Void, Void, Void> {
                     //looping through the childrenTags in the current items
                     for (int j = 0; j < itemchilds.getLength(); j++) {
                         Node cureent = itemchilds.item(j);
+                        //the equalsIgnoreCase method checks to see if the current node is similar to the string in the brackets
                         if (cureent.getNodeName().equalsIgnoreCase("title")){
                             item.setTitle(cureent.getTextContent());
                             item.getTitle();
