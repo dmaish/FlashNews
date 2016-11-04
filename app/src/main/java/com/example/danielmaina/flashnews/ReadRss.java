@@ -59,6 +59,7 @@ public class ReadRss extends AsyncTask<Void, Void, Void> {
         MyAdapter adapter =new MyAdapter(context,feedItems);
         //layout manager
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
+
         //setting recyclerView adapter
         recyclerView.setAdapter(adapter);
     }
