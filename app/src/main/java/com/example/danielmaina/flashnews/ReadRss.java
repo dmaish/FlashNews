@@ -3,7 +3,7 @@ package com.example.danielmaina.flashnews;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
-import android.util.Log;
+import android.support.v7.widget.RecyclerView;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -13,6 +13,7 @@ import org.w3c.dom.NodeList;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -26,12 +27,16 @@ public class ReadRss extends AsyncTask<Void, Void, Void> {
     String address = "http://www.thestar.com.my/rss/editors-choice/news/";
     ProgressDialog progressDialog;
     URL url;
-
+    //recyclerView Object for this class
+    RecyclerView recyclerView;
+    //defining the ArrayList
+    ArrayList<FeedItem>feedItems;
 
 
     //constructor for the class
-    public ReadRss(Context context) {
+    public ReadRss(Context context, RecyclerView recyclerView) {
         this.context = context;
+        this.recyclerView=recyclerView;
         progressDialog = new ProgressDialog(context);
         progressDialog.setMessage("Loading News...");
     }
@@ -61,6 +66,10 @@ public class ReadRss extends AsyncTask<Void, Void, Void> {
         if (data != null) {
             //utilising the node interphase
             //object to store our root element
+
+            //creating an arrayList to store a single news Item
+            feedItems = new ArrayList<>();
+
             Element root = data.getDocumentElement();
             //node to store channel info in the xml document
             Node channel = root.getChildNodes().item(1);
@@ -90,14 +99,15 @@ public class ReadRss extends AsyncTask<Void, Void, Void> {
                         }else if (cureent.getNodeName().equalsIgnoreCase("link")){
                             item.setLink(cureent.getTextContent());
                             item.getLink();
+                        }else if (cureent.getNodeName().equalsIgnoreCase("media:content")){
+                            //this should return the Url of the thumbnail store in the media:content tag
+                            String url = cureent.getAttributes().item(0).getTextContent();
+                            item.setThumbnailUrl(url);
                         }
                     }
-                    Log.d("theItem", String.valueOf(item));
-                    Log.d("itemTitle", item.getTitle());
-                    Log.d("itemDescription",item.getDescription());
-                    Log.d("itemPubDate",item.getPubDate());
-                    Log.d("itemLink",item.getLink());
 
+                    //storing the news Item in the arrayList after every Loop
+                    feedItems.add(item);
 
                 }
             }
@@ -119,7 +129,6 @@ public class ReadRss extends AsyncTask<Void, Void, Void> {
             return xmlDoc;
         } catch (Exception e) {
             e.printStackTrace();
-            Log.d("shida","shida zingine");
             return null;
         }
     }
