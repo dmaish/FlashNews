@@ -62,6 +62,8 @@ public class ReadRss extends AsyncTask<Void, Void, Void> {
 
         //setting recyclerView adapter
         recyclerView.setAdapter(adapter);
+        //the decoration Item of the recyclerViews
+        recyclerView.addItemDecoration(new VerticalSpace(50));
     }
 
     @Override
