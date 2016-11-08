@@ -1,6 +1,7 @@
 package com.example.danielmaina.flashnews;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -47,11 +48,22 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder>{
                 .playOn(holder.cardView);
 
         //storing current Item
-        FeedItem current=feedItems.get(position);
+        final FeedItem current=feedItems.get(position);
         //accessing the news Items  on the custom layout using the ViewHolder object
         holder.Title.setText(current.getTitle());
         holder.Description.setText(current.getDescription());
         holder.Date.setText(current.getPubDate());
+
+     //setting onClick Listeners to the cardViews
+        holder.cardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent(context,NewsDetails.class);
+                intent.putExtra("Link",current.getLink());
+                context.startActivity(intent);
+            }
+        });
+
 
 
     }
